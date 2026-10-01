@@ -49,7 +49,7 @@ nav a:hover{color:var(--ink)}
 #lobby,#interior{opacity:0}
 #ext,#interior,#hero,#hint,#gl,#walk{pointer-events:none}
 #gl{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0}
-#winglow{position:absolute;left:27%;top:40%;width:30%;height:38%;mix-blend-mode:screen;opacity:.2;
+#winglow{position:absolute;left:2%;top:18%;width:42%;height:48%;mix-blend-mode:screen;opacity:.2;
   background:radial-gradient(ellipse at 50% 50%,rgba(255,190,110,.9) 0,rgba(255,160,80,.35) 40%,rgba(255,150,70,0) 72%)}
 #walk{position:absolute;left:0;right:0;bottom:11vh;text-align:center;opacity:0;padding:0 20px}
 #walk b{display:block;font-family:var(--serif);font-weight:300;font-size:clamp(24px,2.6vw,40px);margin-top:6px;text-shadow:0 2px 30px rgba(0,0,0,.8)}
@@ -65,11 +65,11 @@ nav a:hover{color:var(--ink)}
   background:radial-gradient(circle,rgba(255,206,150,.55) 0,rgba(255,180,110,.18) 40%,rgba(255,180,110,0) 70%);will-change:transform}
 
 /* portals */
-.dim{position:absolute;top:19%;height:81%;pointer-events:none;opacity:0;transition:opacity .7s ease;filter:blur(7px);
-  background:linear-gradient(to bottom,rgba(6,4,3,.84) 0,rgba(6,4,3,.84) 70%,rgba(6,4,3,.5) 84%,rgba(6,4,3,0) 100%)}
-.hot{position:absolute;top:21%;height:57%;cursor:pointer;border-radius:2px;transition:box-shadow .7s ease}
+.dim{position:absolute;top:11%;height:89%;pointer-events:none;opacity:0;transition:opacity .7s ease;filter:blur(7px);
+  background:linear-gradient(to bottom,rgba(6,4,3,.84) 0,rgba(6,4,3,.84) 68%,rgba(6,4,3,.5) 84%,rgba(6,4,3,0) 100%)}
+.hot{position:absolute;top:14%;height:57.5%;cursor:pointer;border-radius:2px;transition:box-shadow .7s ease}
 .hot.on{box-shadow:0 0 90px 12px rgba(255,170,90,.22)}
-.plabel{position:absolute;top:80.5%;transform:translateX(-50%);text-align:center;white-space:nowrap;pointer-events:none;transition:opacity .6s,transform .6s}
+.plabel{position:absolute;top:77%;transform:translateX(-50%);text-align:center;white-space:nowrap;pointer-events:none;transition:opacity .6s,transform .6s}
 .plabel small{display:block;font-size:11px;letter-spacing:.3em;color:var(--mute);margin-bottom:4px}
 .plabel b{font-family:var(--serif);font-weight:300;font-size:clamp(26px,3vw,46px);line-height:1;letter-spacing:.01em;color:var(--mute);transition:color .6s}
 .plabel span{display:block;margin-top:8px;font-size:12.5px;letter-spacing:.04em;color:var(--ink);opacity:0;transform:translateY(6px);transition:.6s}
@@ -79,15 +79,15 @@ nav a:hover{color:var(--ink)}
 #lobbyui.show{opacity:1}
 
 /* scene texts */
-#hero{position:absolute;left:0;right:0;top:15vh;padding:0 34px;text-align:center;will-change:transform,opacity}
+#hero{position:absolute;left:0;right:0;bottom:11vh;padding:0 34px;text-align:center;will-change:transform,opacity}
 #hero small,.kicker{display:block;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:var(--mute)}
 #hero small{color:#d9cdbf;text-shadow:0 1px 14px rgba(0,0,0,.8)}
 #hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(34px,5.3vw,92px);line-height:1;letter-spacing:-.01em;margin:14px 0 0;text-shadow:0 2px 34px rgba(0,0,0,.75),0 0 90px rgba(0,0,0,.5)}
 #hero h1 em{font-style:italic;color:#f6d9b4}
-#hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);text-align:center}
+#hint{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);text-align:center}
 #hint::after{content:"";display:block;width:1px;height:34px;margin:10px auto 0;background:linear-gradient(var(--ink),transparent);animation:drip 2s ease-in-out infinite}
 @keyframes drip{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
-#choose{position:absolute;left:0;right:0;top:9.5vh;text-align:center;opacity:0;transition:opacity .7s;pointer-events:none;padding:0 20px}
+#choose{position:absolute;left:0;right:0;top:auto;bottom:2.2vh;text-align:center;opacity:0;transition:opacity .7s;pointer-events:none;padding:0 20px}
 #choose.show{opacity:1}
 #choose h2{font-family:var(--serif);font-weight:300;font-size:clamp(24px,2.6vw,40px);margin-top:4px;line-height:1.1}
 #enterbar{position:absolute;left:50%;bottom:9vh;transform:translateX(-50%);display:none;gap:8px;align-items:center;opacity:0;transition:opacity .6s;pointer-events:none}
@@ -186,11 +186,12 @@ footer{position:relative;z-index:1;background:#050302;border-top:1px solid var(-
   header{padding:16px 18px}
   nav{display:none}
   .cta-top{padding:8px 14px;font-size:12px}
-  #hero{top:13vh;padding:0 20px}
+  #hero{bottom:17vh;padding:0 20px}
   #enterbar{display:flex;bottom:62px;gap:6px}
   #enterbar button{white-space:nowrap;padding:10px 13px}
   .plabel{display:none}
   #hint{bottom:58px}
+  #choose{bottom:118px}
   .chap{align-items:flex-end;padding:0 22px 22vh}
   .chap.title{align-items:center;padding-bottom:0}
   #scrim{background:linear-gradient(to top,rgba(8,5,3,.92) 0,rgba(8,5,3,.6) 42%,rgba(8,5,3,.1) 75%)}
@@ -229,22 +230,21 @@ footer{position:relative;z-index:1;background:#050302;border-top:1px solid var(-
   <div class="stage" id="lobby">
     <img alt="" data-src="02_lobby">
     <div id="lobbyui">
-      <div class="dim" data-k="sauna"  style="left:10.6%;width:21.8%"></div>
-      <div class="dim" data-k="hammam" style="left:39.8%;width:20.4%"></div>
-      <div class="dim" data-k="spa"    style="left:68%;width:21.4%"></div>
-      <div class="hot" data-k="sauna"  style="left:12.6%;width:17.6%"></div>
-      <div class="hot" data-k="hammam" style="left:42%;width:16%"></div>
-      <div class="hot" data-k="spa"    style="left:70%;width:17.4%"></div>
-      <div class="plabel" data-k="sauna"  style="left:21.4%"><small>01</small><b>сауна</b><span>термодревесина и свет из-под полков</span></div>
-      <div class="plabel" data-k="hammam" style="left:50%"><small>02</small><b>хаммам</b><span>камень, свод и звёздное небо</span></div>
-      <div class="plabel" data-k="spa"    style="left:78.7%"><small>03</small><b>spa-зона</b><span>вода, тишина, шезлонги по замерам</span></div>
+      <div class="dim" data-k="sauna"  style="left:5.2%;width:25.4%"></div>
+      <div class="dim" data-k="hammam" style="left:37%;width:25.4%"></div>
+      <div class="dim" data-k="spa"    style="left:68.8%;width:25.6%"></div>
+      <div class="hot" data-k="sauna"  style="left:7.4%;width:21%"></div>
+      <div class="hot" data-k="hammam" style="left:39.1%;width:21.2%"></div>
+      <div class="hot" data-k="spa"    style="left:71%;width:21.3%"></div>
+      <div class="plabel" data-k="sauna"  style="left:18%"><small>01</small><b>сауна</b><span>термодревесина и свет из-под полков</span></div>
+      <div class="plabel" data-k="hammam" style="left:49.7%"><small>02</small><b>хаммам</b><span>камень, свод и звёздное небо</span></div>
+      <div class="plabel" data-k="spa"    style="left:81.7%"><small>03</small><b>spa-зона</b><span>вода, тишина, шезлонги по замерам</span></div>
     </div>
   </div>
 
   <div class="stage" id="interior">
     <img alt="" data-k="sauna"  data-src="03_sauna">
     <img alt="" data-k="hammam" data-src="04_hammam">
-    <img alt="" data-k="spa"    data-src="05_spa">
   </div>
 
   <div id="glow"></div>
@@ -353,7 +353,7 @@ const lerp=(a,b,t)=>a+(b-a)*t;
 const eio=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
 const sstep=t=>t*t*(3-2*t);
 
-const A=2752/1536;
+const A=1672/941;
 const small=Math.min(innerWidth,innerHeight)<=820&&innerWidth<=900;
 const touch=matchMedia('(hover:none)').matches;
 
@@ -366,15 +366,17 @@ const stages=[ext,lobby,interior];
 const T_EXT=[.01,.17], T_GAL=[.15,.62], T_SWAP=[.615,.64], T_UI=[.66,.82], T_ZOOM=[.82,.985];
 
 /* focal points, in fractions of the picture */
-const DOOR=[.512,.585];
-const PORTAL={sauna:[.214,.495],hammam:[.5,.495],spa:[.787,.495]};
+const DOOR=[.497,.45];
+const PORTAL={sauna:[.18,.43],hammam:[.497,.43],spa:[.817,.43]};
 /* camera stops inside each space: title + four chapters -> [x, y, zoom] */
 const SHOTS={
-  sauna:[[.5,.5,1.06],[.30,.68,1.5],[.2,.3,1.55],[.84,.7,1.6],[.5,.36,1.42]],
-  hammam:[[.5,.5,1.06],[.5,.26,1.45],[.3,.12,1.6],[.2,.62,1.5],[.5,.64,1.5]],
+  sauna:[[.5,.5,1.06],[.28,.68,1.5],[.82,.28,1.5],[.82,.62,1.55],[.5,.4,1.45]],
+  hammam:[[.5,.5,1.06],[.5,.22,1.45],[.3,.1,1.6],[.18,.66,1.5],[.5,.6,1.5]],
   spa:[[.5,.5,1.06],[.3,.36,1.45],[.22,.72,1.6],[.6,.62,1.5],[.8,.5,1.6]]
 };
 const STEAM={lobby:.25,sauna:.3,hammam:.85,spa:.35};
+/* spaces that already have their interior frame; flip spa to true once media/05_spa.jpg is in place */
+const READY={sauna:true,hammam:true,spa:false};
 
 /* ---------- images ---------- */
 let pending=0;
@@ -417,7 +419,8 @@ function look(el,fx,fy,s,ox,oy){
 /* ---------- focus ---------- */
 let focus=null, chosen='hammam', uiOn=false;
 function setFocus(k){
-  focus=k; if(k) chosen=k;
+  focus=k; if(k&&READY[k]) chosen=k;
+  $('#enterbar .go').textContent=k&&!READY[k]?'в полной версии':'войти →';
   $$('.dim').forEach(d=>d.style.opacity=(uiOn&&d.dataset.k!==focus)?(focus?1:.72):0);
   $$('.hot,.plabel,#enterbar button[data-k]').forEach(e=>e.classList.toggle('on',e.dataset.k===focus));
 }
@@ -444,7 +447,7 @@ function scrollToY(y,ms){
 addEventListener('wheel',()=>{tween=null},{passive:true});
 addEventListener('touchstart',()=>{tween=null},{passive:true});
 const enterY=()=>introH-vh+vh*.92;
-function enter(k){ setFocus(k); setSpace(k); scrollToY(enterY(),2800); }
+function enter(k){ setFocus(k); if(!READY[k]) return; setSpace(k); scrollToY(enterY(),2800); }
 
 $$('.hot').forEach(h=>{
   h.addEventListener('mouseenter',()=>{ if(uiOn&&!touch) setFocus(h.dataset.k); });
@@ -722,7 +725,7 @@ function frame(now){
   }
 
   /* lobby: three portals */
-  const z=range(pI,T_ZOOM[0],T_ZOOM[1]), f=PORTAL[focus||chosen];
+  const z=range(pI,T_ZOOM[0],T_ZOOM[1]), f=PORTAL[focus&&(READY[focus]||pI<T_UI[1])?focus:chosen];
   const maxPan=Math.max(0,(SW-vw)/2);
   const panT=uiOn||z>0?clamp(vw/2-(SL+f[0]*SW),-maxPan,maxPan):0;
   panX+=(panT-panX)*.08;
@@ -730,7 +733,7 @@ function frame(now){
   lobby.style.opacity=(G?swap:range(pI,T_GAL[0],T_GAL[0]+.05))*(1-range(pI,.94,.985));
   place(lobby,f[0],f[1],1.04*Math.exp(Math.log(6.5)*Math.pow(z,1.5)),eio(range(pI,T_ZOOM[0],.94)),panX,px*par,py*par);
   setUi(pI>T_UI[0]&&pI<T_UI[1]);
-  if(pI>=T_UI[1]&&pI<.9&&!focus) setFocus(chosen);
+  if(pI>=T_UI[1]&&pI<.9&&(!focus||!READY[focus])) setFocus(chosen);
   if(pI>=T_UI[1]&&!$('#interior img.on[data-k="'+chosen+'"]')) setSpace(chosen);
 
   /* inside the chosen space: the camera moves from detail to detail with the chapters */
@@ -753,6 +756,8 @@ function frame(now){
 const io=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('seen'); }),{threshold:.35});
 $$('.chap,.proj').forEach(el=>io.observe(el));
 
+$$('#switch button,#interior img').forEach(e=>{ if(!READY[e.dataset.k]) e.remove(); });
+if(!READY.spa){ const s=$('.plabel[data-k="spa"] span'); if(s) s.textContent='откроем в полной версии сайта'; }
 setSpace('hammam'); focus=null;
 layout(); addEventListener('load',layout);
 /* build the gallery once the fonts are in, so the stands are typeset properly */
