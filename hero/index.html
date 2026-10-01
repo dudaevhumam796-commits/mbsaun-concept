@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>mbsaun · шапка, концепт</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<style>
+:root{--bg:#2c2a27;--ink:#f4ecdd;--mute:#b9ae9f;--green:#6f9a72;--line:rgba(244,236,221,.2);
+  --serif:"Cormorant Garamond","Times New Roman",Georgia,serif;--sans:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-weight:400;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* their header, kept as is */
+.top{position:fixed;left:0;right:0;top:0;z-index:20;pointer-events:none}
+.top>*{pointer-events:auto}
+.info{display:flex;justify-content:space-between;gap:20px;padding:11px 36px;font-size:13px;color:var(--mute);border-bottom:1px solid rgba(244,236,221,.08);background:rgba(44,42,39,.82);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.info b{color:var(--ink);font-weight:600}
+.bar{display:flex;align-items:center;justify-content:space-between;padding:20px 36px;background:linear-gradient(to bottom,rgba(44,42,39,.82),rgba(44,42,39,0))}
+.logo{font-family:var(--serif);font-size:44px;font-weight:500;line-height:1;letter-spacing:-.01em}
+nav{display:flex;gap:46px;font-family:var(--serif);font-size:16px;color:#cfc5b6}
+nav a:first-child{color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:4px}
+.icons{display:flex;gap:12px}
+.icons i{width:30px;height:30px;border-radius:50%;background:var(--ink);display:block}
+
+/* pinned 3D hero */
+#track{position:relative;height:640vh}
+#pin{position:sticky;top:0;height:100vh;overflow:hidden;background:var(--bg)}
+#gl{position:absolute;inset:0;width:100%;height:100%;display:block}
+#shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(28,24,20,.72) 0,rgba(28,24,20,.28) 46%,rgba(28,24,20,0) 70%)}
+#dark{position:absolute;inset:0;pointer-events:none;background:rgba(22,17,13,.34);opacity:0}
+
+#hero{position:absolute;left:0;right:0;top:0;bottom:0;padding:0 7.3vw;display:flex;flex-direction:column;justify-content:center;will-change:transform,opacity}
+#hero h1{font-family:var(--serif);font-weight:500;font-size:clamp(38px,5.1vw,98px);line-height:.98;letter-spacing:-.02em;max-width:900px}
+#hero h1 b{font-family:var(--sans);font-weight:800;letter-spacing:-.03em;font-size:.86em}
+#hero p{margin-top:26px;font-size:clamp(15px,1.25vw,24px);line-height:1.4;color:#e6dccb;max-width:640px}
+#hero p b{font-weight:800}
+.btns{display:flex;gap:14px;margin-top:9vh;flex-wrap:wrap}
+.btn{padding:19px 28px;border-radius:8px;font-weight:800;font-size:16px;letter-spacing:.02em;border:1px solid var(--line)}
+.btn.g{background:var(--green);border-color:var(--green)}
+.awards{position:absolute;right:11vw;top:30vh;display:grid;grid-template-columns:repeat(2,96px);gap:16px 26px;font-family:var(--serif);text-align:center;font-size:14px;line-height:1.15;color:#eadfcd}
+.awards div{height:96px;border:1px solid rgba(244,236,221,.35);border-radius:50%;display:grid;place-items:center}
+.win{position:absolute;right:9vw;bottom:13vh;max-width:330px;padding:14px 18px;border:1px solid var(--line);border-radius:8px;background:rgba(244,236,221,.12);font-weight:800;font-size:14px;line-height:1.3;backdrop-filter:blur(4px)}
+
+.cap{position:absolute;left:7.3vw;bottom:12vh;max-width:460px;opacity:0;will-change:opacity,transform}
+.cap small{display:block;font-size:12px;letter-spacing:.3em;text-transform:uppercase;color:#e9b27a}
+.cap span{display:block;margin-top:10px;font-family:var(--serif);font-size:clamp(26px,2.7vw,46px);line-height:1.04;text-shadow:0 2px 30px rgba(0,0,0,.7)}
+#hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--mute);text-align:center}
+#hint::after{content:"";display:block;width:1px;height:30px;margin:8px auto 0;background:linear-gradient(var(--ink),transparent)}
+
+/* the page that continues: its first screen lies on the sauna floor */
+#next{position:relative;z-index:2;margin-top:-100vh}
+#onwood{height:100vh;display:grid;place-items:center;text-align:center;padding:0 7vw}
+#onwood small{display:block;font-size:12px;letter-spacing:.34em;text-transform:uppercase;color:#f0c79a}
+#onwood h2{font-family:var(--serif);font-weight:500;font-size:clamp(32px,4.6vw,84px);line-height:1.02;margin-top:18px;text-shadow:0 3px 40px rgba(0,0,0,.75)}
+#rest{background:var(--bg);padding:13vh 7.3vw 16vh}
+#rest .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5vw;max-width:1200px}
+#rest .v{font-family:var(--serif);font-size:clamp(54px,6vw,104px);line-height:1}
+#rest .c{margin-top:10px;color:var(--mute);font-size:15px;max-width:260px}
+#rest .note{margin-top:13vh;padding-top:26px;border-top:1px solid var(--line);color:var(--mute);font-size:14px;max-width:760px;line-height:1.6}
+.badge{position:fixed;left:18px;bottom:16px;z-index:30;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute);background:rgba(30,27,24,.72);border:1px solid var(--line);padding:7px 12px;border-radius:30px;backdrop-filter:blur(6px)}
+
+@media (max-width:900px){
+  .info{display:none}.bar{padding:16px 18px}.logo{font-size:32px}nav{display:none}.icons i{width:26px;height:26px}
+  #hero{padding:0 20px;justify-content:flex-end;padding-bottom:17vh}
+  .awards,.win{display:none}.btns{margin-top:28px}.btn{padding:14px 18px;font-size:14px}
+  #shade{background:linear-gradient(to top,rgba(28,24,20,.82) 0,rgba(28,24,20,.3) 55%,rgba(28,24,20,0) 80%)}
+  .cap{left:20px;right:20px;bottom:15vh}
+  #rest{padding:9vh 20px 12vh}#rest .grid{grid-template-columns:1fr;gap:34px}
+  .badge{left:10px;bottom:10px;font-size:9px}
+}
+</style>
+</head>
+<body>
+<div class="top">
+  <div class="info"><span>Адрес: <b>Москва • Санкт-Петербург</b></span><span>Время работы: <b>ежедневно с 09:00 до 19:00</b></span><span>E-mail: <b>order@mbsaun.ru</b></span><span>Звонок по России бесплатный: <b>8 (499) 681-62-65</b></span></div>
+  <div class="bar">
+    <a class="logo" href="#">mbsaun</a>
+    <nav><a>главная</a><a>о компании</a><a>услуги</a><a>портфолио</a><a>партнёрам</a><a>блог</a><a>контакты</a></nav>
+    <div class="icons"><i></i><i></i><i></i><i></i></div>
+  </div>
+</div>
+<div class="badge">концепт шапки · не официальный сайт</div>
+
+<section id="track">
+  <div id="pin">
+    <canvas id="gl"></canvas>
+    <div id="shade"></div>
+    <div id="dark"></div>
+
+    <div id="hero">
+      <h1>создаём пространство для&nbsp;ваших <b>ощущений</b></h1>
+      <p><b>авторские интерьеры</b> саун, хаммамов и SPA-зон для частных резиденций и коммерческих объектов</p>
+      <div class="btns"><a class="btn g">получить консультацию</a><a class="btn">узнать больше</a></div>
+      <div class="awards"><div>1 место<br>x5</div><div>Премии<br>x10</div><div>Призёры<br>x15</div><div>Журналы<br>x8</div></div>
+      <div class="win">mbsaun победители международных премий в банной индустрии</div>
+    </div>
+
+    <div class="cap" data-a=".16" data-b=".4"><small>сборка</small><span>каждая сауна собирается из термодревесины собственного производства</span></div>
+    <div class="cap" data-a=".6" data-b=".74"><small>полки</small><span>парящие полки и скрытый свет</span></div>
+    <div class="cap" data-a=".76" data-b=".88"><small>печь</small><span>печь как центр композиции</span></div>
+    <div id="hint">листайте</div>
+  </div>
+</section>
+
+<main id="next">
+  <div id="onwood"><div><small>о компании</small><h2>мы проектируем состояние,<br>архитектура — лишь его форма</h2></div></div>
+  <div id="rest">
+    <div class="grid">
+      <div><div class="v">700+</div><div class="c">реализованных саун, хаммамов и SPA-зон</div></div>
+      <div><div class="v">200+</div><div class="c">городов, от Петербурга до Камчатки</div></div>
+      <div><div class="v">8+ лет</div><div class="c">качество, которому доверяют</div></div>
+    </div>
+    <div class="note">Дальше идёт ваш текущий сайт без изменений. Меняется только первый экран: вместо видео сауна собирается из досок, камера проходит по ней и опускается к полу, а пол становится фоном следующего блока.</div>
+  </div>
+</main>
+
+<script>
+(()=>{
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const clamp=(v,a=0,b=1)=>Math.min(b,Math.max(a,v));
+const range=(p,a,b)=>clamp((p-a)/(b-a));
+const lerp=(a,b,t)=>a+(b-a)*t;
+const sstep=t=>t*t*(3-2*t);
+const eout=t=>1-Math.pow(1-t,3);
+const T=window.THREE, track=$('#track'), pin=$('#pin'), heroEl=$('#hero'), hint=$('#hint'), dark=$('#dark'), shade=$('#shade'), caps=$$('.cap');
+if(!T){ return; }
+const small=innerWidth<=900;
+
+/* seeded random so the scene is the same on every load */
+let seed=7; const rnd=()=>{ seed=(seed*16807)%2147483647; return (seed-1)/2147483646; };
+
+let renderer;
+try{ renderer=new T.WebGLRenderer({canvas:$('#gl'),antialias:true,powerPreference:'high-performance'}); }catch(e){ return; }
+renderer.setPixelRatio(Math.min(devicePixelRatio||1,small?1.5:1.75));
+renderer.outputEncoding=T.sRGBEncoding;
+renderer.toneMapping=T.ACESFilmicToneMapping; renderer.toneMappingExposure=1.0;
+const BG=0x2c2a27;
+const scene=new T.Scene(); scene.background=new T.Color(BG); scene.fog=new T.FogExp2(BG,.045);
+const cam=new T.PerspectiveCamera(46,1,.05,80);
+
+/* ---------- wood ---------- */
+function woodTex(tone){
+  const c=document.createElement('canvas'); c.width=1024; c.height=256; const g=c.getContext('2d');
+  g.fillStyle=tone; g.fillRect(0,0,1024,256);
+  for(let i=0;i<150;i++){ const y=rnd()*256, a=.03+rnd()*.1; g.strokeStyle=rnd()<.6?'rgba(60,30,10,'+a+')':'rgba(255,214,160,'+a*.7+')';
+    g.lineWidth=.6+rnd()*2.2; g.beginPath(); g.moveTo(0,y); const k=(rnd()-.5)*10;
+    g.bezierCurveTo(340,y+k,680,y-k,1024,y+(rnd()-.5)*4); g.stroke(); }
+  for(let i=0;i<2;i++){ const x=rnd()*1024, y=40+rnd()*176, r=5+rnd()*7; const gr=g.createRadialGradient(x,y,0,x,y,r*2);
+    gr.addColorStop(0,'rgba(40,18,6,.45)'); gr.addColorStop(1,'rgba(40,18,6,0)'); g.fillStyle=gr; g.beginPath(); g.ellipse(x,y,r*1.8,r,0,0,6.3); g.fill(); }
+  const ed=g.createLinearGradient(0,0,0,256); ed.addColorStop(0,'rgba(20,9,3,.55)'); ed.addColorStop(.07,'rgba(20,9,3,0)'); ed.addColorStop(.93,'rgba(20,9,3,0)'); ed.addColorStop(1,'rgba(20,9,3,.6)');
+  g.fillStyle=ed; g.fillRect(0,0,1024,256);
+  const t=new T.CanvasTexture(c); t.encoding=T.sRGBEncoding; t.wrapS=t.wrapT=T.RepeatWrapping; t.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy()); return t;
+}
+const mats=['#8a5a34','#7e512d','#93623a','#764a28','#855631'].map(tone=>{ const m=new T.MeshStandardMaterial({map:woodTex(tone),roughness:.78,metalness:0}); m.map.repeat.set(2,1); return m; });
+const matFloor=['#7a4e2b','#724827','#825431'].map(tone=>{ const tx=woodTex(tone); tx.repeat.set(4,1); return new T.MeshStandardMaterial({map:tx,roughness:.6}); });
+
+/* ---------- the sauna, plank by plank ---------- */
+const W=3.6, D=4.6, H=2.45, X0=-W/2, X1=W/2, Z0=-D/2, Z1=D/2;
+const parts=[]; let maxOrder=0;
+const root=new T.Group(); scene.add(root);
+const qY=new T.Quaternion().setFromAxisAngle(new T.Vector3(0,1,0),Math.PI/2), qZ=new T.Quaternion().setFromAxisAngle(new T.Vector3(0,0,1),Math.PI/2);
+function plank(len,sy,sz,x,y,z,axis,order,pool){
+  const m=new T.Mesh(new T.BoxGeometry(len,sy,sz),(pool||mats)[Math.floor(rnd()*(pool||mats).length)]);
+  const home=new T.Vector3(x,y,z), hq=axis==='z'?qY.clone():axis==='y'?qZ.clone():new T.Quaternion();
+  const dir=new T.Vector3(x+(rnd()-.5)*2.4,y-1+(rnd()-.2)*2.2,z+(rnd()-.5)*2.4).normalize();
+  const from=home.clone().addScaledVector(dir,3.2+rnd()*5.5); from.y+=1+rnd()*2.2;
+  const fq=new T.Quaternion().setFromEuler(new T.Euler((rnd()-.5)*5,(rnd()-.5)*5,(rnd()-.5)*5));
+  parts.push({m,home,hq,from,fq,order:order+rnd()*.6,ph:rnd()*6.28,sp:.3+rnd()*.5});
+  maxOrder=Math.max(maxOrder,order+1); root.add(m); return m;
+}
+const PW=.15, BH=.144, BT=.036;
+/* floor */
+for(let i=0;i<W/PW;i++) plank(D,.04,PW-.004,X0+PW/2+i*PW,-.02,0,'z',0+i*.02,matFloor);
+/* walls, row by row */
+const rows=Math.round(H/BH);
+const door=[.3,1.3,2.06], win=[-1.05,1.05,1.0,2.0];
+for(let r=0;r<rows;r++){
+  const y=BH/2+r*BH, o=2+r*.55;
+  plank(D,BH-.004,BT,X0-BT/2,y,0,'z',o);
+  plank(D,BH-.004,BT,X1+BT/2,y,0,'z',o);
+  if(y>win[2]&&y<win[3]){ plank(win[0]-X0,BH-.004,BT,(X0+win[0])/2,y,Z0-BT/2,'x',o); plank(X1-win[1],BH-.004,BT,(X1+win[1])/2,y,Z0-BT/2,'x',o); }
+  else plank(W,BH-.004,BT,0,y,Z0-BT/2,'x',o);
+  if(y<door[2]){ plank(door[0]-X0,BH-.004,BT,(X0+door[0])/2,y,Z1+BT/2,'x',o); plank(X1-door[1],BH-.004,BT,(X1+door[1])/2,y,Z1+BT/2,'x',o); }
+  else plank(W,BH-.004,BT,0,y,Z1+BT/2,'x',o);
+}
+/* benches along the left wall */
+const oB=2+rows*.55+.5;
+function bench(y,xa,xb,za,zb,n,o){
+  const w=(xb-xa)/n; for(let i=0;i<n;i++) plank(zb-za,.036,w-.014,xa+w/2+i*w,y,(za+zb)/2,'z',o+i*.12);
+  plank(zb-za,.13,.03,xb-.015,y-.085,(za+zb)/2,'z',o+.8);
+}
+bench(.96,X0,X0+.68,Z0,Z1-.9,5,oB);
+bench(.5,X0+.68,X0+1.22,Z0,Z1-.9,4,oB+1);
+plank(D-.9,.16,.03,X0+.02,1.36,(Z0+Z1-.9)/2,'z',oB+2); plank(D-.9,.16,.03,X0+.02,1.62,(Z0+Z1-.9)/2,'z',oB+2.2);
+/* heater guard rail */
+const hx=1.22, hz=-1.45;
+[[hx-.42,hz+.5],[hx-.42,hz-.5]].forEach((p,i)=>plank(.62,.05,.05,p[0],.31,p[1],'y',oB+2.6+i*.1));
+plank(.95,.07,.035,hx-.42,.6,hz,'z',oB+2.9); plank(.9,.07,.035,hx,.6,hz+.5,'x',oB+3);
+/* ceiling last */
+const oC=oB+3.6;
+for(let i=0;i<W/PW;i++) plank(D,.03,PW-.004,X0+PW/2+i*PW,H+.015,0,'z',oC+i*.05);
+
+/* heater: dark stone body and stones */
+const stoneMat=new T.MeshStandardMaterial({color:0x0f0d0c,roughness:.95});
+const bodyMat=new T.MeshStandardMaterial({color:0x090807,roughness:.55,metalness:.35});
+const heater=new T.Group(); heater.position.set(hx,0,hz); root.add(heater);
+const body=new T.Mesh(new T.BoxGeometry(.56,.78,.56),bodyMat); body.position.y=.39; heater.add(body);
+const emberMat=new T.MeshStandardMaterial({color:0x1a110c,roughness:.9,emissive:0xff4208,emissiveIntensity:0});
+for(let i=0;i<70;i++){ const s=new T.Mesh(new T.IcosahedronGeometry(.04+rnd()*.035,1),rnd()<.14?emberMat:stoneMat);
+  s.position.set((rnd()-.5)*.44,.8+rnd()*.1,(rnd()-.5)*.44); s.rotation.set(rnd()*6,rnd()*6,rnd()*6); heater.add(s); }
+/* bucket on the lower bench */
+const bucket=new T.Mesh(new T.CylinderGeometry(.11,.09,.17,20),mats[3]); bucket.position.set(X0+.95,.6,-.6); root.add(bucket);
+
+/* window to the forest */
+const wc=document.createElement('canvas'); wc.width=1024; wc.height=512; { const g=wc.getContext('2d');
+  const gr=g.createLinearGradient(0,0,0,512); gr.addColorStop(0,'#1b2a45'); gr.addColorStop(.5,'#52698f'); gr.addColorStop(.74,'#d9a06a'); gr.addColorStop(.86,'#7b6a66'); gr.addColorStop(1,'#1b1f27'); g.fillStyle=gr; g.fillRect(0,0,1024,512);
+  for(let l=0;l<3;l++){ if(l){ const mg=g.createLinearGradient(0,300,0,512); mg.addColorStop(0,'rgba(170,180,200,0)'); mg.addColorStop(1,'rgba(170,180,200,.22)'); g.fillStyle=mg; g.fillRect(0,300,1024,212); }
+    g.fillStyle=['#566a8c','#2a3852','#0d131e'][l]; for(let i=0;i<26;i++){ const x=rnd()*1024, h=150+rnd()*230+l*60, w=26+rnd()*30+l*10; g.beginPath(); g.moveTo(x,512-h);
+    for(let k=0;k<7;k++){ const yy=512-h+k*h/7; g.lineTo(x+w*(k+1)/7,yy+h/7); g.lineTo(x+w*(k+.4)/7,yy+h/7); } g.lineTo(x,512); g.lineTo(x-4,512);
+    for(let k=6;k>=0;k--){ const yy=512-h+k*h/7; g.lineTo(x-w*(k+.4)/7,yy+h/7); g.lineTo(x-w*(k+1)/7,yy+h/7); } g.closePath(); g.fill(); } } }
+const wt=new T.CanvasTexture(wc); wt.encoding=T.sRGBEncoding;
+const winMesh=new T.Mesh(new T.PlaneGeometry(win[1]-win[0],win[3]-win[2]),new T.MeshBasicMaterial({map:wt,side:T.DoubleSide,transparent:true,opacity:0,fog:false}));
+winMesh.position.set(0,(win[2]+win[3])/2,Z0-BT); root.add(winMesh);
+
+/* hidden light under the benches */
+const ledMat=new T.MeshBasicMaterial({color:0xffd9a6,transparent:true,opacity:0,fog:false});
+const leds=[[X0+.66,.86,-.45,D-.95],[X0+1.2,.4,-.45,D-.95],[X0+.05,2.38,0,D-.1],[X1-.05,2.38,0,D-.1]].map(a=>{ const m=new T.Mesh(new T.BoxGeometry(.018,.018,a[3]),ledMat); m.position.set(a[0],a[1],a[2]); root.add(m); return m; });
+const gcv=document.createElement('canvas'); gcv.width=8; gcv.height=128; { const g=gcv.getContext('2d'), r=g.createLinearGradient(0,0,0,128); r.addColorStop(0,'rgba(255,190,110,.9)'); r.addColorStop(.35,'rgba(255,170,90,.28)'); r.addColorStop(1,'rgba(255,170,90,0)'); g.fillStyle=r; g.fillRect(0,0,8,128); }
+const glowTex=new T.CanvasTexture(gcv);
+const glows=[[X0+.67,.6,-.45,D-.95,.55],[X0+1.21,.2,-.45,D-.95,.42]].map(a=>{ const m=new T.Mesh(new T.PlaneGeometry(a[3],a[4]),new T.MeshBasicMaterial({map:glowTex,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false,side:T.DoubleSide,fog:false})); m.position.set(a[0],a[1],a[2]); m.rotation.y=Math.PI/2; root.add(m); return m; });
+const hemi=new T.HemisphereLight(0xffe6c8,0x191410,.5); scene.add(hemi);
+const key=new T.DirectionalLight(0xfff1dd,.85); key.position.set(5,7,6); scene.add(key);
+const L=(c,d,x,y,z)=>{ const l=new T.PointLight(c,0,d,2); l.position.set(x,y,z); root.add(l); return l; };
+const warm=[L(0xffa24e,4.2,X0+.82,.74,-1.3),L(0xffa24e,4.2,X0+.82,.74,.5),L(0xffa24e,3.6,X0+1.36,.3,-.4),L(0xffc890,5,.3,2.25,0)];
+if(!small) warm.push(L(0xffa24e,3.6,X0+1.36,.3,1.0));
+const cool=L(0x6f8fc4,4.5,0,1.5,Z0+.5);
+const ember=L(0xff6a22,3.2,hx,1.05,hz);
+const WARM=[2.3,2.3,1.9,.3,1.6];
+
+/* dust in the light */
+const N=small?90:200, pos=new Float32Array(N*3); for(let i=0;i<N;i++){ pos[i*3]=X0+rnd()*W; pos[i*3+1]=.2+rnd()*(H-.4); pos[i*3+2]=Z0+rnd()*D; }
+const dg=new T.BufferGeometry(); dg.setAttribute('position',new T.BufferAttribute(pos,3));
+const dc=document.createElement('canvas'); dc.width=dc.height=64; { const g=dc.getContext('2d'), r=g.createRadialGradient(32,32,0,32,32,32); r.addColorStop(0,'rgba(255,220,170,1)'); r.addColorStop(1,'rgba(255,220,170,0)'); g.fillStyle=r; g.fillRect(0,0,64,64); }
+const dustMat=new T.PointsMaterial({map:new T.CanvasTexture(dc),size:.035,transparent:true,opacity:0,blending:T.AdditiveBlending,depthWrite:false});
+const dust=new T.Points(dg,dustMat); root.add(dust);
+
+/* ---------- camera route ---------- */
+const UP=new T.Vector3(0,1,0), DOWNUP=new T.Vector3(0,0,-1), FLOOR_H=.86, FX=.36, FZ=-.35;
+const K=[ // [q, position, look at]
+  [0,   [5.6,2.9,7.4], [0,1.15,0]],
+  [.30, [3.3,2.0,7.0], [0,1.2,0]],
+  [.45, [.86,1.5,4.9], [.7,1.3,0]],
+  [.56, [.8,1.46,1.9], [-.5,1.0,-.8]],
+  [.68, [.45,1.4,.5],  [-1.5,.72,-.7]],
+  [.80, [.1,1.36,-.2], [1.3,.82,-1.5]],
+  [.90, [.3,1.38,.2],  [.1,1.4,-2.3]],
+  [1,   [FX,FLOOR_H,FZ], [FX,0,FZ]]
+];
+const tmp=new T.Object3D(), aim=new T.PerspectiveCamera();   // a camera looks down its -Z, a plain object down +Z
+const KP=K.map(k=>new T.Vector3(...k[1])), KQ=K.map((k,i)=>{ aim.position.copy(KP[i]); aim.up.copy(i===K.length-1?DOWNUP:UP); aim.lookAt(new T.Vector3(...k[2])); return aim.quaternion.clone(); });
+const curve=new T.CatmullRomCurve3(KP,false,'catmullrom',.35);
+
+/* ---------- layout and loop ---------- */
+let vw=1,vh=1,scrollRange=1,qEnd=1,tanV=1;
+function resize(){
+  vw=innerWidth; vh=innerHeight;
+  cam.fov=vw/vh<.8?62:46; cam.aspect=vw/vh; cam.updateProjectionMatrix(); tanV=Math.tan(cam.fov*Math.PI/360);
+  renderer.setSize(vw,vh,false);
+  scrollRange=Math.max(1,track.offsetHeight-vh);
+  qEnd=clamp(1-vh/scrollRange,.5,.95);   // the last screen of the pinned scroll is where the page slides in over the floor
+}
+let sy=0, first=true, lw=0, lh=0, mx=0, my=0, mxT=0, myT=0, settled=false;
+addEventListener('pointermove',e=>{ mxT=e.clientX/vw-.5; myT=e.clientY/vh-.5; },{passive:true});
+const q4=new T.Quaternion();
+function frame(now){
+  requestAnimationFrame(frame);
+  const t=(now||0)/1000;
+  if(innerWidth!==lw||innerHeight!==lh){ lw=innerWidth; lh=innerHeight; resize(); }
+  sy=first?scrollY:sy+(scrollY-sy)*.13; first=false; if(!isFinite(sy)) sy=0;
+  if(sy>track.offsetTop+track.offsetHeight+vh*.2) return;
+  mx+=(mxT-mx)*.05; my+=(myT-my)*.05;
+  const p=clamp((sy-track.offsetTop)/scrollRange), q=clamp(p/qEnd), tail=range(p,qEnd,1);
+
+  /* assembly */
+  const a=range(q,.03,.44);
+  if(a<1||!settled){
+    const span=.3;
+    for(const s of parts){
+      const st=(s.order/maxOrder)*(1-span), k=eout(range(a,st,st+span)), f=1-k;
+      s.m.position.lerpVectors(s.from,s.home,k);
+      if(f>0){ s.m.position.y+=Math.sin(t*s.sp+s.ph)*.12*f; s.m.position.x+=Math.cos(t*s.sp*.7+s.ph)*.06*f; }
+      q4.copy(s.fq); if(f>0){ tmp.rotation.set(0,t*.08*s.sp,0); q4.multiply(tmp.quaternion); }
+      s.m.quaternion.copy(q4).slerp(s.hq,k);
+    }
+    settled=a>=1;
+  }
+  const built=eout(range(a,.62,.9));
+  heater.scale.setScalar(Math.max(.001,built)); heater.position.y=(1-built)*-.6;
+  bucket.scale.setScalar(Math.max(.001,eout(range(a,.8,1))));
+  /* the light comes on when the last plank is in */
+  const lit=sstep(range(q,.40,.52));
+  warm.forEach((l,i)=>l.intensity=WARM[i]*lit*(1+.03*Math.sin(t*3+i)));
+  ember.intensity=1.25*lit*(1+.12*Math.sin(t*5.3)+.06*Math.sin(t*11));
+  emberMat.emissiveIntensity=lit*(.32+.1*Math.sin(t*4.1));
+  cool.intensity=.55*built;
+  glows.forEach(gm=>gm.material.opacity=.5*lit);
+  ledMat.opacity=lit; winMesh.material.opacity=built; dustMat.opacity=.55*lit;
+  key.intensity=lerp(.85,.03,lit); hemi.intensity=lerp(.5,.085,lit);
+  scene.fog.density=lerp(.045,.012,lit);
+  dust.position.y=Math.sin(t*.3)*.05;
+
+  /* camera */
+  let i=0; while(i<K.length-2&&q>K[i+1][0]) i++;
+  const tl=range(q,K[i][0],K[i+1][0]);
+  cam.position.copy(curve.getPoint((i+tl)/(K.length-1)));
+  cam.quaternion.copy(KQ[i]).slerp(KQ[i+1],sstep(tl));
+  const free=1-range(q,.9,1);
+  if(q<=K[1][0]){ const o=t*.05; cam.position.x+=Math.sin(o)*.5*(1-a); }
+  cam.translateX(mx*.3*free); cam.translateY(-my*.2*free);
+  cam.rotateY(-mx*.05*free); cam.rotateX(-my*.035*free);
+  /* last screen: the floor moves under the camera exactly as fast as the page scrolls */
+  if(tail>0) cam.position.z=FZ+tail*2*FLOOR_H*tanV;
+  renderer.render(scene,cam);
+
+  /* overlays */
+  heroEl.style.opacity=1-range(q,.015,.09); heroEl.style.transform='translate3d(0,'+(-range(q,0,.1)*50)+'px,0)';
+  heroEl.style.pointerEvents=q>.05?'none':'auto';
+  hint.style.opacity=1-range(q,.005,.04);
+  shade.style.opacity=1-range(q,.03,.12)*.75;
+  dark.style.opacity=range(q,.93,1);
+  caps.forEach(c=>{ const A=+c.dataset.a,B=+c.dataset.b, o=range(q,A,A+.035)*(1-range(q,B-.035,B)); c.style.opacity=o; c.style.transform='translate3d(0,'+((1-o)*18)+'px,0)'; });
+}
+window.renderAt=y=>{ scrollTo(0,y); first=true; };
+resize(); requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
