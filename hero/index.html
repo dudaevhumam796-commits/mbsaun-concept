@@ -104,7 +104,9 @@ nav a:first-child{color:var(--ink);font-weight:600;text-decoration:underline;tex
       <div class="win">mbsaun победители международных премий в банной индустрии</div>
     </div>
 
-    <div class="cap" data-a=".08" data-b=".23"><small>сборка</small><span>каждая сауна собирается из термодревесины собственного производства</span></div>
+    <div class="cap" data-a=".07" data-b=".16"><small>этап 1</small><span>каркас и пароизоляция</span></div>
+    <div class="cap" data-a=".17" data-b=".26"><small>этап 2</small><span>термодревесина собственного производства</span></div>
+    <div class="cap" data-a=".27" data-b=".33"><small>этап 3</small><span>свет, ради которого всё это</span></div>
     <div class="cap" data-a=".33" data-b=".52"><small>панно</small><span>горы на скрытой подсветке</span></div>
     <div class="cap" data-a=".55" data-b=".69"><small>детали</small><span>ваш знак, собранный из того же дерева</span></div>
     <div class="cap" data-a=".7" data-b=".78"><small>потолок</small><span>звёздное небо над полком</span></div>
@@ -135,7 +137,7 @@ const T=window.THREE, track=$('#track'), heroEl=$('#hero'), hint=$('#hint'), sha
 const AR=16/9;
 
 /* scroll timeline, in fractions of the pinned scroll */
-const Q={build:[.04,.25], light:[.235,.29], toFilm:[.285,.31], film:[.30,.86], toWall:[.855,.87], open:[.875,1]};
+const Q={build:[.05,.31], light:[.3,.345], film:[.345,.86], toWall:[.855,.87], open:[.875,1]};
 
 let seed=11; const rnd=()=>{ seed=(seed*16807)%2147483647; return (seed-1)/2147483646; };
 
@@ -149,10 +151,34 @@ fetch('seq.json').then(r=>r.json()).then(s=>{
     im.onload=()=>{ frames[i]=im; dirty=true; next(); }; im.onerror=next; im.src='f/'+String(i).padStart(3,'0')+'.webp'; };
   for(let j=0;j<6;j++) next();
 });
+const STAGES=['s1.webp','s2.webp','s3.webp','a.jpg'].map(src=>{ const im=new Image(); im.onload=()=>{ dirty=true; }; im.src=src; return im; });
+const wc=document.createElement('canvas'), wx=wc.getContext('2d');
 const nearest=i=>{ if(frames[i]) return frames[i]; for(let d=1;d<40;d++){ if(frames[i-d]) return frames[i-d]; if(frames[i+d]) return frames[i+d]; } return null; };
-function cover(img,alpha,scale,ox,oy){
-  const cw=film.width, ch=film.height, s=Math.max(cw/img.width,ch/img.height)*scale, w=img.width*s, h=img.height*s;
-  fx.globalAlpha=alpha; fx.drawImage(img,(cw-w)/2+ox,(ch-h)/2+oy,w,h);
+function cover(img,alpha,scale,ox,oy,ctx){
+  ctx=ctx||fx; const cw=film.width, ch=film.height, s=Math.max(cw/img.width,ch/img.height)*scale, w=img.width*s, h=img.height*s;
+  ctx.globalAlpha=alpha; ctx.drawImage(img,(cw-w)/2+ox,(ch-h)/2+oy,w,h); ctx.globalAlpha=1;
+}
+/* the next stage grows over the previous one from the floor up, with a soft edge */
+function rise(img,f,scale,ox,oy){
+  const W=film.width, H=film.height;
+  if(wc.width!==W||wc.height!==H){ wc.width=W; wc.height=H; }
+  wx.globalCompositeOperation='source-over'; wx.clearRect(0,0,W,H); cover(img,1,scale,ox,oy,wx);
+  const edge=H*(1.2-f*1.45), g=wx.createLinearGradient(0,edge-H*.22,0,edge+H*.03);
+  g.addColorStop(0,'rgba(0,0,0,0)'); g.addColorStop(1,'rgba(0,0,0,1)');
+  wx.globalCompositeOperation='destination-in'; wx.fillStyle=g; wx.fillRect(0,0,W,H); wx.globalCompositeOperation='source-over';
+  fx.drawImage(wc,0,0);
+}
+let stageKey='';
+function drawStages(q,scale,ox,oy){
+  const u=range(q,Q.build[0],Q.build[1])*3, i=Math.min(2,Math.floor(u)), f=sstep(clamp(u-i)), lit=sstep(range(q,Q.light[0],Q.light[1]));
+  const key=u.toFixed(3)+'|'+lit.toFixed(3)+'|'+scale.toFixed(4)+'|'+Math.round(ox)+'|'+Math.round(oy);
+  if(key===stageKey&&!dirty) return; stageKey=key; dirty=false; lastKey='';
+  const a=STAGES[i], b=STAGES[i+1]; if(!a.complete||!a.naturalWidth) return;
+  cover(a,1,scale,ox,oy);
+  if(f>0&&b.complete&&b.naturalWidth){ if(i<2) rise(b,f,scale,ox,oy); else cover(b,f,scale,ox,oy); }
+  /* lights off until the room is finished */
+  const dark=i<2?0:.5*f*(1-lit);
+  if(dark>0){ fx.fillStyle='rgba(12,8,5,'+dark+')'; fx.fillRect(0,0,film.width,film.height); }
 }
 let lastKey='', dirty=true;
 function drawFilm(v,scale,ox,oy){
@@ -244,18 +270,21 @@ function tick(now){
   const q=clamp((sy-track.offsetTop)/scrollRange);
 
   /* which layer plays: boards -> their film -> boards again */
-  const inFilm=range(q,Q.toFilm[0],Q.toFilm[1])*(1-range(q,Q.toWall[0],Q.toWall[1]));
-  const env=sstep(range(q,Q.film[0],Q.film[0]+.05))*(1-sstep(range(q,Q.film[1]-.05,Q.film[1])));
+  const inFilm=1-range(q,Q.toWall[0],Q.toWall[1]);
+  const env=1-sstep(range(q,Q.film[1]-.06,Q.film[1]));
+  const k=film.width/vw, ox=-mx*14*env*k, oy=-my*9*env*k;
+  /* one slow push-in across the whole story, back to 1.0 exactly when the wall takes over */
+  const push=1+.045*sstep(range(q,0,Q.film[0]))*env;
   film.style.opacity=inFilm>0?1:0;
-  glc.style.opacity=q<Q.toFilm[0]?1:q<Q.toFilm[1]?1-range(q,Q.toFilm[0],Q.toFilm[1]):q<Q.toWall[0]?0:1;
-  if(inFilm>0&&SEQ) drawFilm(range(q,Q.film[0],Q.film[1])*(SEQ.n-1),1+.035*env,-mx*14*env*film.width/vw,-my*9*env*film.width/vw);
-  if(G&&(q<Q.toFilm[1]||q>=Q.toWall[0])) G.render(q,t);
+  glc.style.opacity=q<Q.toWall[0]?0:1;
+  if(inFilm>0){ if(q<Q.film[0]) drawStages(q,push,ox,oy); else if(SEQ) drawFilm(range(q,Q.film[0],Q.film[1])*(SEQ.n-1),push,ox,oy); }
+  if(G&&q>=Q.toWall[0]) G.render(q,t);
   behind.style.visibility=q>Q.toWall[0]?'visible':'hidden';
 
   /* the light comes on when the last board lands */
   flash.style.opacity=range(q,Q.light[0],Q.light[0]+.025)*(1-range(q,Q.light[0]+.03,Q.light[1]+.03))*.8;
 
-  heroEl.style.opacity=1-range(q,.012,.07); heroEl.style.transform='translate3d(0,'+(-range(q,0,.08)*50)+'px,0)';
+  heroEl.style.opacity=1-range(q,.02,.07); heroEl.style.transform='translate3d(0,'+(-range(q,0,.08)*50)+'px,0)';
   heroEl.style.pointerEvents=q>.04?'none':'auto';
   hint.style.opacity=1-range(q,.004,.03);
   shade.style.opacity=(1-range(q,.03,.1)*.6)*(1-range(q,Q.open[0],Q.open[0]+.05));
